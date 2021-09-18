@@ -7,13 +7,13 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView, ListView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from myapp.forms import TasksForm, UserRegistrationForm
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import EmailMessage
 import uuid
 from django.http import HttpResponseRedirect
 # Create your views here.
@@ -36,8 +36,6 @@ class SignupView(SuccessMessageMixin, TemplateView):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            # username = form.cleaned_data.get('username')
-            # messages.success(request, f'{username.capitalize()}, you have created your account successfully.')
             username = form.cleaned_data.get('username')
             userobj = User.objects.get(username = username)
             email = userobj.email
@@ -57,12 +55,11 @@ class SignupView(SuccessMessageMixin, TemplateView):
         context = self.get_context_data(**kwargs)
         context.update(domain=domain, protocol= protocol, token=token,username=username)
         html_message = render_to_string('email_verification_content.html', context)
-        message = strip_tags(html_message) # no need to use strip_tags because html tags are already stripped when we use render_to_string and keyword argument 'html_message' in send_email
+        message = strip_tags(html_message) 
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [email]
         email = EmailMessage(subject, message, from_email=email_from, to = recipient_list)
         email.send()
-        # send_mail(subject, message, email_from, recipient_list, html_message=html_message)
 
 
 class VerifyView(TemplateView):
@@ -117,13 +114,7 @@ class TaskListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         return MyTasks.objects.filter(user = user)
-        
-    # def get_context_data(self, *args, **kwargs):
-    #     context = self.get_context_data(**kwargs)
-    #     context['tasks'] = MyTasks.user.all()
-    #     return context
-    # raise_exception = True
-    # permission_denied_message = "Permission Denied Message by me"
+
 
 class TaskCreateView(SuccessMessageMixin, CreateView):
     """View to create new task."""
@@ -133,7 +124,6 @@ class TaskCreateView(SuccessMessageMixin, CreateView):
     template_name = 'task_create.html'
     raise_exception = True
     success_message = 'Task successfully created!'
-    # fields = ['task_title', 'task_desc', 'taskDate','taskTime']
     success_url = reverse_lazy('task_list')
     form_class = TasksForm
 
@@ -147,7 +137,6 @@ class TaskUpdateView(SuccessMessageMixin, UpdateView):
     model = MyTasks
     context_object_name = 'task'
     raise_exception = True
-    # fields = ['task_title', 'task_desc', 'taskDate', 'taskTime']
     success_message = 'Task successfully updated!'
     success_url = reverse_lazy('task_list')
     template_name = 'task_update.html'
@@ -203,7 +192,6 @@ class SearchView(ListView):
             self.result = None
         return self.result
 
-    # Just tried this method, not used anywhere
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['results'] = self.result
