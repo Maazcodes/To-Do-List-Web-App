@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Task Delete Page{% endblock title %}
+
+{% block content %}
+<h2 class="text-center my-2 py-2">Delete Task</h2>
+<div class="container">
+    <h4 class="my-2 py-2">Do you really wanna delete this task?</h4>
+    <blockquote>
+        <h5>{{task.task_id}}: {{task.task_title}} - {{task.task_desc}}</h5>
+    </blockquote>
+</div>
+<form method="POST">
+    {% csrf_token %}
+    <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-outline-success mx-auto my-2 py-2">Delete</button>
+    </div>
+</form>
+
+<div class="d-grid gap-2">
+<a href="{% url 'task_list' %}" class="btn btn-outline-danger mx-auto my-2 py-2" role="button">Cancel</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Task Create Page{% endblock title %}
+
+{% block content %}
+{% load static %}
+<h2 class="text-center my-2">Create Task</h2>
+{% include 'message_file.html' %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+                {% include 'form_table.html' with form=form %}
+            
+                <!-- <label for="time" class="me-3"><strong>*Set Time:</strong></label>
+                <input id="time" name="time" class="my-2 py-2" type="time"><br>
+                <label for="date" class="me-3"><strong>*Set Date:</strong></label>
+                <input name="date" id="date" type="date">
+             -->
+                <div class="d-grid gap-2 mt-5">
+                <button type="submit" class="btn btn-outline-success mx-auto my-2 py-2">Save</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <img style="height: 400px; width: 400px; margin-top: 100px; margin-left: 80px;" class="rounded" src="{% static 'myapp/add_task_image.png' %}" alt="Add Task Image">
+        </div>
+    </div>
+</div>
+
+<div>
+    <a href="{% url 'task_list' %}" class="btn btn-outline-danger" style="margin-left: 310px;
+    margin-top: 12px; margin-bottom: 10px;" role="button">Cancel</a>
+</div>
+{% endblock content %}

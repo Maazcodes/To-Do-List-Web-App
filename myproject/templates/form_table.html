@@ -1,0 +1,19 @@
+<div class="my-2 py-2">{{form.non_field_errors}}</div>
+
+{% for field in form.visible_fields %}
+<div class="container mt-2 pt-2 ">
+    <label for="{{field.id_for_label}}">
+        <div class="row">
+            <h5 class="col-md">{{field.label}}{% if field.field.required %}*{% endif %}</h5><hr>
+            <span class="col-md">{{field}}</span>
+        </div>
+        
+    </label>
+
+    {% if field.help_text %}
+       <br> <small class="text-center">{{field.help_text|capfirst}}</small>
+    {% endif %}
+
+    {{field.errors}}
+</div>
+{% endfor %}

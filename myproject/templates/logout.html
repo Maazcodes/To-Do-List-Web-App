@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %} Logout Page {% endblock title%}
+
+{% block content %}
+<div class="container">
+    <a href="{% url 'home' %}" class="btn btn-outline-primary my-3 mx-3" role="button"> Back to home</a>
+    <a href="{% url 'login' %}" class="btn btn-outline-primary my-3" role="button"> Back to Login</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %} Tasks Page {% endblock title %}
+
+{% block content %}
+
+{% if tasks %}
+{% include 'message_file.html' %}
+<h3 class="text-center mt-2 mb-4">All tasks of {{user.username | title}}</h3>
+
+<form method="POST" action="{% url 'task_delete_many' %}">
+  {% csrf_token %}
+  <table class="container table mt-3 ">
+    <thead>
+      <tr>
+        <!-- <th scope="col">#</th> -->
+        <th scope="col">Task Title</th>
+        <th scope="col">Task Description</th>
+        <th scope="col">Task Time</th>
+        <th scope="col">Task Day & Date</th>
+        <th scope="col">Delete Tasks</th>
+      </tr>
+    </thead>
+    {% for task in tasks %}
+    <tbody>
+      <tr>
+        <!-- <th scope="row">{{task.task_id}}</th> -->
+        <td>{{task.task_title}}</td>
+        <td>{{task.task_desc}}</td>
+        {% if task.taskTime %}
+        <td>{{task.taskTime}}</td>
+        {% else %}
+        <td>No Time Set</td>
+        {% endif %}
+        {% if task.taskDate %}
+        <td>
+          {{task.taskDate}}
+        </td>
+        {% else %}
+        <td>No Date Set</td>
+        {% endif %}
+        <td>
+          <input type="checkbox" name="tasks_delete" style="height: 20px; width: 20px;" value="{{task.task_id}}">
+        </td>
+        <td><a role="button" class="btn btn-outline-success" href="{% url 'task_update' task.task_id %}">Edit</a></td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+  <!-- Add new task button -->
+ 
+    
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-md-6">
+        <a class=" btn btn-outline-success mx-auto my-2 py-2" role="button" href="{% url 'task_create' %}">Add New Task</a> 
+      </div>
+      <div class="col-md-6">
+        <input type="submit" class="btn btn-outline-danger mx-auto my-2 py-2" value="Delete">
+      </div>
+    </div>
+  </div>
+
+  <!-- <a href="{% url 'task_delete_many' %}" type="submit" class=" btn btn-outline-danger mx-auto my-2 py-2" role="button">Delete</a> -->
+</form>
+
+
+  <div class=" mt-3 " style="position: fixed; left: 420px; bottom: 20px;">
+    {% if is_paginated %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page=1" class="btn btn-outline-primary">&laquo; first</a> 
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-primary mx-2">previous</a> 
+      {% endif %}
+
+      <strong>
+        <a href="?page={{page_obj.number}}" class="btn btn-primary">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+      </strong>
+
+      {% if page_obj.has_next %}
+         <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-primary mx-2">next &raquo;</a>
+         <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-primary">last &raquo;</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+{% else %}
+  <div class="text-center">
+    <h4 class="mt-3">There are no tasks</h4>
+    <a class="btn btn-outline-primary mt-3 pt-3 " role="button" href="{% url 'task_create' %}">Add new task</a>
+  </div>
+{% endif %}
+{% endblock content %}
+
+<!-- colspan="2" -->
