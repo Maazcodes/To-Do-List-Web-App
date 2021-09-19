@@ -8,4 +8,4 @@ I have used Class Based Views to create, update and delete tasks.
 
 Implementation of ModelForm and use of date and time widgets.
 
-A user can delete multiple tasks at a time.
+A user can select and delete multiple tasks at a time.
